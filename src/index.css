@@ -670,29 +670,29 @@ h1, h2, h3, h4, .brand-title {
 
 .product-image-canvas {
   width: 100%;
-  height: 190px;
-  background-color: #FFFFFF;
+  height: 200px;
+  background-color: #F8FAFC;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px 20px 8px 20px;
+  padding: 0;
   position: relative;
   overflow: hidden;
+  border-top-left-radius: inherit;
+  border-top-right-radius: inherit;
 }
 
 .product-image-canvas img {
-  max-width: 82%;
-  max-height: 82%;
-  width: auto;
-  height: auto;
-  object-fit: contain !important;
+  width: 100%;
+  height: 100%;
+  object-fit: cover !important;
   display: block;
-  margin: auto;
+  margin: 0;
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .product-card:hover .product-image-canvas img {
-  transform: scale(1.04);
+  transform: scale(1.05);
 }
 
 .product-badge-group {
@@ -850,8 +850,8 @@ h1, h2, h3, h4, .brand-title {
 .upload-slot img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  background-color: #FFFFFF;
+  object-fit: cover;
+  border-radius: 8px;
 }
 
 .slot-tag {
