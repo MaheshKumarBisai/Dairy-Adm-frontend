@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Plus, Edit2, Package, Check, AlertTriangle, Layers } from 'lucide-react';
 import { Product, Category } from '../types';
+import { resolveProductImage, getFallbackForName } from '../utils/image';
 
 interface ProductsPageProps {
   products: Product[];
@@ -66,7 +67,8 @@ export const ProductsPage: React.FC<ProductsPageProps> = ({
         <div className="products-grid">
           {filtered.map((product) => {
             const stock = product.inventory?.availableQuantity ?? 0;
-            const primaryImg = product.imageUrl || (product.images && product.images[0]);
+            const rawImg = product.imageUrl || (product.images && product.images[0]);
+            const primaryImg = resolveProductImage(rawImg, product.name);
             const imageCount = product.images?.length || (product.imageUrl ? 1 : 0);
 
             return (
@@ -90,7 +92,17 @@ export const ProductsPage: React.FC<ProductsPageProps> = ({
                   </div>
 
                   {primaryImg ? (
-                    <img src={primaryImg} alt={product.name} />
+                    <img
+                      src={primaryImg}
+                      alt={product.name}
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        const fallback = getFallbackForName(product.name);
+                        if (target.src !== fallback) {
+                          target.src = fallback;
+                        }
+                      }}
+                    />
                   ) : (
                     <div style={{ color: '#94A3B8', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
                       <Package size={36} />
@@ -124,7 +136,14 @@ export const ProductsPage: React.FC<ProductsPageProps> = ({
                           justifyContent: 'center',
                         }}
                       >
-                        <img src={img} alt={`Angle ${i + 1}`} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                        <img
+                          src={resolveProductImage(img, product.name)}
+                          alt={`Angle ${i + 1}`}
+                          style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src = getFallbackForName(product.name);
+                          }}
+                        />
                       </div>
                     ))}
                   </div>

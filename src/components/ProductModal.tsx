@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { X, UploadCloud, CheckCircle2, Loader2, Image as ImageIcon } from 'lucide-react';
 import { Product, Category } from '../types';
 import { api } from '../services/api';
+import { resolveProductImage, getFallbackForName } from '../utils/image';
 
 interface ProductModalProps {
   isOpen: boolean;
@@ -196,7 +197,14 @@ export const ProductModal: React.FC<ProductModalProps> = ({
                     </div>
                   ) : frontUrl ? (
                     <>
-                      <img src={frontUrl} alt="Front View" />
+                      <img
+                        src={resolveProductImage(frontUrl, name)}
+                        alt="Front View"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = getFallbackForName(name);
+                        }}
+                      />
                       <span className="slot-tag">Front View (Primary)</span>
                     </>
                   ) : (
@@ -225,7 +233,14 @@ export const ProductModal: React.FC<ProductModalProps> = ({
                     </div>
                   ) : backUrl ? (
                     <>
-                      <img src={backUrl} alt="Back View" />
+                      <img
+                        src={resolveProductImage(backUrl, name)}
+                        alt="Back View"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = getFallbackForName(name);
+                        }}
+                      />
                       <span className="slot-tag">Back View</span>
                     </>
                   ) : (
@@ -254,7 +269,14 @@ export const ProductModal: React.FC<ProductModalProps> = ({
                     </div>
                   ) : detailUrl ? (
                     <>
-                      <img src={detailUrl} alt="Detail View" />
+                      <img
+                        src={resolveProductImage(detailUrl, name)}
+                        alt="Detail View"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = getFallbackForName(name);
+                        }}
+                      />
                       <span className="slot-tag">Side / Detail</span>
                     </>
                   ) : (
